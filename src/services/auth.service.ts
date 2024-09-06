@@ -4,6 +4,7 @@ import { hashPassword, comparePassword } from "../utils";
 import { Conflict, HttpError } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
+import { formatUser } from "../utils/responsebody";
 
 
 export class AuthService {
@@ -62,13 +63,12 @@ export class AuthService {
                 expiresIn: "1d",
             });
 
-            return {user, access_token, message:"Login Success"}
+            const userResponse = formatUser(user)
+            return {user: userResponse, access_token, message:"Login Successfull"}
         } catch (error) {
-            throw new HttpError(error.status || 500, error.message || error);
-
-            // if (error instanceof HttpError) {
-            //     throw error;
-            // }        
+            if (error instanceof HttpError) {
+                throw error;
+            }        
         }   
     }         
 

@@ -15,7 +15,7 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
 const login = asyncHandler(async (req: Request, res: Response) => {
 
     const {user, message, access_token} = await authService.login(req.body);
-    sendJsonResponse(res, 201, message, user, access_token)
+    sendJsonResponse(res, 200, message, user, access_token)
 
 });
 

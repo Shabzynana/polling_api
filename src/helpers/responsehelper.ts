@@ -18,7 +18,6 @@ const sendJsonResponse = (
   accessToken?: string,
 ) => {
   const responsePayload: any = {
-    status: "success",
     message,
     status_code: statusCode,
     data,
