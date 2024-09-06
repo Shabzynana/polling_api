@@ -2,6 +2,9 @@ import AppDataSource from "../data-source";
 import { User } from "../models";
 import { hashPassword, comparePassword } from "../utils";
 import { Conflict, HttpError } from "../middleware";
+import jwt from "jsonwebtoken";
+import config from "../config";
+
 
 export class AuthService {
 
@@ -37,6 +40,37 @@ export class AuthService {
             }
         }   
     }
+
+
+    public async login(payload): Promise<{message: string; user: Partial<User>; access_token: string; }> {
+
+        const {email, password} = payload;
+
+        try {
+            const user = await User.findOne({
+              where: { email }, });
+            if (!user) {
+                throw new Conflict("User not found");
+            }
+
+            const isPasswordValid = await comparePassword(password, user.password);
+            if (!isPasswordValid) {
+                throw new HttpError(401, "Invalid credentials");
+            }
+
+            const access_token = jwt.sign({ user_id: user.id }, config.TOKEN_SECRET, {
+                expiresIn: "1d",
+            });
+
+            return {user, access_token, message:"Login Success"}
+        } catch (error) {
+            throw new HttpError(error.status || 500, error.message || error);
+
+            // if (error instanceof HttpError) {
+            //     throw error;
+            // }        
+        }   
+    }         
 
 
 
