@@ -4,7 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from "typeo
 import { getIsInvalidMessage } from "../utils";
 import {Poll, Vote} from "."; 
 import ExtendedBaseEntity from "../base-entity";
-@Entity()
+@Entity({ name: "users" })
 export class User extends ExtendedBaseEntity {
 
   @Column({ unique: true })
