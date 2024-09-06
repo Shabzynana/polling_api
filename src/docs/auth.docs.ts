@@ -89,9 +89,6 @@ export const login = `
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: number
- *                   example: 200
  *                 message:
  *                   type: string
  *                   example: Login Successfull,
@@ -106,22 +103,14 @@ export const login = `
  *                       properties:
  *                         id:
  *                           type: string
- *                         first_name:
- *                           type: string
- *                         last_name:
+ *                         username:
  *                           type: string
  *                         email:
- *                           type: string
- *                         created_at:
- *                           type: string
- *                         image_url:
- *                           type: string
- *                         role:
  *                           type: string
  *                 access_token:
  *                   type: string
  *       400:
- *         description: Invalid email or password
+ *         description: Invalid credentials
  *       404:
  *         description: User not found
  *       500:
