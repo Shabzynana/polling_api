@@ -32,8 +32,9 @@ export class AuthService {
             user.password = hashedPassword;
 
             const createdUser = await AppDataSource.manager.save(user);
+            const userResponse = formatUser(createdUser);
 
-            return {user: createdUser, message:"User Createed"}
+            return {user: userResponse, message:"User Createed Successfully"}
 
         } catch (error) {
             if (error instanceof HttpError) {
@@ -46,7 +47,6 @@ export class AuthService {
     public async login(payload): Promise<{message: string; user: Partial<User>; access_token: string; }> {
 
         const {email, password} = payload;
-
         try {
             const user = await User.findOne({
               where: { email }, });
