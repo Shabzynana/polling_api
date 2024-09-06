@@ -29,12 +29,9 @@ export const signUp = `
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: number
- *                   example: 201
  *                 message:
  *                   type: string
- *                   example: User Created
+ *                   example: User Created Successfully
  *                 status_code:
  *                   type: number
  *                   example: 201
@@ -49,8 +46,6 @@ export const signUp = `
  *                         username:
  *                           type: string
  *                         email:
- *                           type: string
- *                         created_at:
  *                           type: string
  *       409:
  *         description: User already exists
@@ -91,7 +86,7 @@ export const login = `
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Login Successfull,
+ *                   example: Login Successfull
  *                 status_code:
  *                   type: number
  *                   example: 200
