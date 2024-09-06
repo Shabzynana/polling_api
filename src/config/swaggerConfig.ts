@@ -5,19 +5,19 @@ import { version } from "../../package.json";
 const swaggerDefinition: SwaggerDefinition = {
   openapi: "3.1.0",
   info: {
-    title: "Home-work Ai Express API with Swagger",
+    title: "Polling System API with Swagger",
     version: version,
-    description: "OpenApi documentaiton for the home-work ai project",
+    description: "OpenApi documentaiton for the Polling System project",
   },
   servers: [
     {
       url: `http://localhost:${config.port}/`,
       description: "Local server",
     },
-    {
-      url: "https://api.staging.aiforhomework.com/",
-      description: "Live server",
-    },
+    // {
+    //   url: "https://api.staging.aiforhomework.com/",
+    //   description: "Live server",
+    // },
   ],
   tags: [
     {
