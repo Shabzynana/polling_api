@@ -4,22 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:dev": "ts-node-dev --respawn --transpile-only ./src/index",
-    "start": "ts-node --transpile-only src/index.ts",
-    "test": "jest --forceExit",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "build": "tsc",
-    "prod": "node build/index.js",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
-    "migrate": "typeorm-ts-node-commonjs migration:run -d src/data-source",
-    "migration:create": "typeorm-ts-node-commonjs migration:create db/migrations/migration",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate db/migrations/migration -d src/data-source",
-    "reset-db": "typeorm-ts-node-commonjs schema:drop -d src/data-source && typeorm-ts-node-commonjs schema:sync -d src/data-source",
-    "commitlint": "commitlint --edit",
-    "check-format": "prettier --check .",
-    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist"
+    "add-build": "git add dist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "ts-node-dev --respawn --transpile-only ./src/index"
+
   },
   "pre-commit": [
     "ts.check",
