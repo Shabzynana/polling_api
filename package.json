@@ -5,26 +5,11 @@
   "license": "MIT",
   "scripts": {
 
-
-    "start": "node ./dist/index.ts",
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon dist/index.ts\"",
-
-
-    "start:dev": "ts-node-dev --respawn --transpile-only ./src/index",
-    "test": "jest --forceExit",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "build": "tsc",
-    "prod": "node build/index.js",
-    "lint": "eslint . --ext ts --ext tsx --ext js",
-    "migrate": "typeorm-ts-node-commonjs migration:run -d src/data-source",
-    "migration:create": "typeorm-ts-node-commonjs migration:create db/migrations/migration",
-    "migration:generate": "typeorm-ts-node-commonjs migration:generate db/migrations/migration -d src/data-source",
-    "reset-db": "typeorm-ts-node-commonjs schema:drop -d src/data-source && typeorm-ts-node-commonjs schema:sync -d src/data-source",
-    "commitlint": "commitlint --edit",
-    "check-format": "prettier --check .",
-    "check-lint": "eslint . --ext ts --ext tsx --ext js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "pre-commit": [
     "ts.check",
@@ -50,6 +35,9 @@
     "jest": "^29.7.0",
     "lint-staged": "^15.2.9",
     "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.0.2",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.5",
     "pdf-parse": "^1.1.1",
     "prettier": "^3.3.3",
     "supertest": "^7.0.0",
