@@ -6,7 +6,7 @@ import { authRoute } from "./routes";
 import swaggerSpec from "./config/swaggerConfig";
 
 const CSS_URL =
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 
 const app: Express = express();
 app.options("*", cors());
