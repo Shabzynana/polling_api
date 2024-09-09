@@ -1,23 +1,35 @@
+// {
+// 	"compilerOptions": {
+// 		"module": "commonjs",
+// 		"esModuleInterop": true,
+// 		"allowSyntheticDefaultImports": true,
+// 		"target": "es6",
+// 		"noImplicitAny": true,
+// 		"moduleResolution": "node",
+// 		"sourceMap": true,
+// 		"outDir": "dist",
+// 		"baseUrl": ".",
+// 		"paths": {
+// 			"*": ["node_modules/*", "src/types/*"]
+// 		}
+// 	},
+//   "include": ["./api/*.ts", "./src/**/*"]
+// }
+
 {
   "compilerOptions": {
-    "lib": ["es5", "es6"],
-    "target": "ES2021",
-    "module": "commonjs",
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./build",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
     "sourceMap": true,
-    "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@types", "src/types"],
-    "types": ["jest"],
-    "resolveJsonModule": true
+    "outDir": "dist",
+    "baseUrl": ".",
   },
-  "types": ["node", "jest"],
-  "include": ["src/**/*", "config"],
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "include": ["src/**/*", "index.ts" ]
 }
-

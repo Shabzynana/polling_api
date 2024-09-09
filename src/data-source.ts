@@ -16,7 +16,8 @@ const AppDataSource = new DataSource({
   entities: ["src/models/**/*.ts"],
   migrations: ["db/migrations/**/*.ts"],
   migrationsTableName: "migrations",
-  ssl: isDevelopment,
+  // ssl: isDevelopment,
+  ssl: true,
 });
 
 export async function initializeDataSource() {
