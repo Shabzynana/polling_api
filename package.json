@@ -17,7 +17,9 @@
     "reset-db": "typeorm-ts-node-commonjs schema:drop -d src/data-source && typeorm-ts-node-commonjs schema:sync -d src/data-source",
     "commitlint": "commitlint --edit",
     "check-format": "prettier --check .",
-    "check-lint": "eslint . --ext ts --ext tsx --ext js"
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist"
   },
   "pre-commit": [
     "ts.check",
