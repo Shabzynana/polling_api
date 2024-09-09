@@ -1,5 +1,5 @@
 {
-  "name": "ggg",
+  "name": "shabzynana",
   "version": "1.0.0",
   "main": "./src/index.ts",
   "license": "MIT",
@@ -19,11 +19,6 @@
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js"
   },
-  "pre-commit": [
-    "ts.check",
-    "build",
-    "add-build"
-  ],
   "devDependencies": {
     "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.9.0",
