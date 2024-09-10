@@ -14,10 +14,10 @@ const swaggerDefinition: SwaggerDefinition = {
       url: `http://localhost:${config.port}/`,
       description: "Local server",
     },
-    // {
-    //   url: "https://api.staging.aiforhomework.com/",
-    //   description: "Live server",
-    // },
+    {
+      url: "https://polling-api-kappa.vercel.app/",
+      description: "Live server",
+    },
   ],
   tags: [
     {
