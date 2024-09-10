@@ -32,7 +32,9 @@ const getUsers = asyncHandler( async (req: Request, res: Response) => {
    
     const users = await authService.getUsers();
     const allusers = { users };
-    sendJsonResponse(res, 200, "Successfully retrievedddd users", allusers);
+    return res.status(200).json({ allusers });
+
+    // sendJsonResponse(res, 200, "Successfully retrievedddd users", allusers);
   
 });
 

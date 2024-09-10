@@ -65,7 +65,7 @@ export class AuthService {
             });
 
             const userResponse = formatUser(user)
-            return {users: userResponse, access_token, message:"Login Successfull"}
+            return {users: userResponse, access_token: access_token, message:"Login Successfull"}
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
