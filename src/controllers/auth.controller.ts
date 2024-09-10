@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { AuthService } from "../services/auth.service";
 import { asyncHandler, sendJsonResponse } from "../helpers";
 
@@ -12,12 +12,21 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-const login = asyncHandler(async (req: Request, res: Response) => {
+// const login = asyncHandler(async (req: Request, res: Response) => {
 
-    const {users, message, access_token} = await authService.login(req.body);
-    sendJsonResponse(res, 200, message, users, access_token)
+//     const {users, message, access_token} = await authService.login(req.body);
+//     sendJsonResponse(res, 200, message, users, access_token)
 
-});
+// });
+
+const login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { access_token, users } = await authService.login(req.body);
+      return res.status(200).json({ access_token, users });
+    } catch (error) {
+      next(error);
+    }
+};
 
 const getUsers = asyncHandler( async (req: Request, res: Response) => {
    
