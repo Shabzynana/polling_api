@@ -21,8 +21,8 @@ const signUp = asyncHandler(async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { access_token, users } = await authService.login(req.body);
-      return res.status(200).json({ access_token, users });
+      const { users } = await authService.login(req.body);
+      return res.status(200).json({ users });
     } catch (error) {
       next(error);
     }
