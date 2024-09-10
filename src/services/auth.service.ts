@@ -9,7 +9,7 @@ import { formatUser } from "../utils/responsebody";
 
 export class AuthService {
 
-    public async signUp(payload): Promise<{message: string; user: Partial<User>; }> {
+    public async signUp(payload: any): Promise<{message: string; user: Partial<User>; }> {
 
         const {username, email, password} = payload;
         try {
@@ -44,7 +44,7 @@ export class AuthService {
     }
 
 
-    public async login(payload): Promise<{message: string; user: Partial<User>; access_token: string; }> {
+    public async login(payload: any): Promise<{message: string; user: Partial<User>; access_token: string; }> {
 
         const {email, password} = payload;
         try {
