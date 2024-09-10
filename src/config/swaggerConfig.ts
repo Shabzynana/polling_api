@@ -24,10 +24,10 @@ const swaggerDefinition: SwaggerDefinition = {
       name: "default",
       description: "A list of all default routes",
     },
-    {
-      name: "Authentication",
-      description: "A list of routes for Authentication",
-    },
+    // {
+    //   name: "Authentication",
+    //   description: "A list of routes for Authentication",
+    // },
   ],
   components: {
     securitySchemes: {
