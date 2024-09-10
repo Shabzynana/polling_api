@@ -78,6 +78,7 @@ export class AuthService {
           const userRepository = AppDataSource.getRepository(User);
     
           const users = await userRepository.find();
+          console.log(users, "users")
           if (!users.length) {
             throw new ResourceNotFound("No users found");
           }
