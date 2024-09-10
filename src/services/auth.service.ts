@@ -1,7 +1,7 @@
 import AppDataSource from "../data-source";
 import { User } from "../models";
 import { hashPassword, comparePassword } from "../utils";
-import { Conflict, HttpError } from "../middleware";
+import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
@@ -71,7 +71,26 @@ export class AuthService {
                 throw error;
             }        
         }   
-    }         
+    }
+    
+    public async getUsers(): Promise<{ data: User[] }> {
+        try {
+          const userRepository = AppDataSource.getRepository(User);
+    
+          const users = await userRepository.find();
+          if (!users.length) {
+            throw new ResourceNotFound("No users found");
+          }
+          
+        //   const usersResponse = users.map((user) => formatUser(user));
+
+          return { data: users};
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }      
+        }
+    }
 
 
 

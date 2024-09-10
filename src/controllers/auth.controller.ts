@@ -19,5 +19,19 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 });
 
+const getUsers = async (req: Request, res: Response) => {
+    try {
+      const users = await authService.getUsers();
+      if (!users) {
+        return sendJsonResponse(res, 500, "Could not get users");
+      }
+      const allusers = { users };
+      sendJsonResponse(res, 200, "Successfully retrieved users", allusers);
+    } catch (error) {
+      return sendJsonResponse(res, error.status || 500, error.message || error);
+    }
+  };
+  
 
-export { signUp, login};
+
+export { signUp, login, getUsers};
