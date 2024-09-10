@@ -45,7 +45,7 @@ export class AuthService {
     }
 
 
-    public async login(payload: any): Promise<{message: string; user: Partial<User>; access_token: string; }> {
+    public async login(payload: any): Promise<{message: string; users: Partial<User>; access_token: string; }> {
 
         const {email, password} = payload;
         try {
@@ -65,7 +65,7 @@ export class AuthService {
             });
 
             const userResponse = formatUser(user)
-            return {user: userResponse, access_token, message:"Login Successfull"}
+            return {users: userResponse, access_token, message:"Login Successfull"}
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
