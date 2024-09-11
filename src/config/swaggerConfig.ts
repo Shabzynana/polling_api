@@ -18,6 +18,10 @@ const swaggerDefinition: SwaggerDefinition = {
       url: "https://polling-api-kappa.vercel.app/",
       description: "Live server",
     },
+    {
+      url: "https://polling-api-4p2v.onrender.com/",
+      description: "Live server",
+    },
   ],
   tags: [
     {

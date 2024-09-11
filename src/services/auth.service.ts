@@ -5,6 +5,7 @@ import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
+import { UserResponsePayload } from "../types";
 
 
 export class AuthService {
@@ -73,7 +74,7 @@ export class AuthService {
         }   
     }
     
-    public async getUsers(): Promise<{ data: User[] }> {
+    public async getUsers(): Promise<{ data: UserResponsePayload[]; }> {
         try {
           const userRepository = AppDataSource.getRepository(User);
     
@@ -83,9 +84,9 @@ export class AuthService {
             throw new ResourceNotFound("No users found");
           }
           
-        //   const usersResponse = users.map((user) => formatUser(user));
-
-          return { data: users};
+          const usersResponse = users.map((user) => formatUser(user));
+          return { data: usersResponse};
+          
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
