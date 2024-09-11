@@ -1,7 +1,7 @@
 import AppDataSource from "../data-source";
 import { User } from "../models";
 import { hashPassword, comparePassword } from "../utils";
-import { Conflict, HttpError } from "../middleware";
+import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
@@ -9,12 +9,13 @@ import { formatUser } from "../utils/responsebody";
 
 export class AuthService {
 
-    public async signUp(payload): Promise<{message: string; user: Partial<User>; }> {
+    public async signUp(payload: any): Promise<{message: string; user: Partial<User>; }> {
 
         const {username, email, password} = payload;
         try {
             const userExist = await User.findOne({
               where: { email }, });
+            console.log(userExist, "user")  
             if (userExist) {
                 throw new Conflict("User already exists");
             }
@@ -44,7 +45,7 @@ export class AuthService {
     }
 
 
-    public async login(payload): Promise<{message: string; user: Partial<User>; access_token: string; }> {
+    public async login(payload: any): Promise<{message: string; user: Partial<User>; access_token: string; }> {
 
         const {email, password} = payload;
         try {
@@ -64,13 +65,33 @@ export class AuthService {
             });
 
             const userResponse = formatUser(user)
-            return {user: userResponse, access_token, message:"Login Successfull"}
+            return {user: userResponse, access_token: access_token, message:"Login Successfull"}
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
             }        
         }   
-    }         
+    }
+    
+    public async getUsers(): Promise<{ data: User[] }> {
+        try {
+          const userRepository = AppDataSource.getRepository(User);
+    
+          const users = await userRepository.find();
+          console.log(users, "users")
+          if (!users.length) {
+            throw new ResourceNotFound("No users found");
+          }
+          
+        //   const usersResponse = users.map((user) => formatUser(user));
+
+          return { data: users};
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }      
+        }
+    }
 
 
 

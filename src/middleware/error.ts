@@ -58,20 +58,45 @@ const routeNotFound = (req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({ success: false, status: 404, message });
 };
 
+// const errorHandler = (
+//   err: HttpError,
+//   _req: Request,
+//   res: Response,
+//   _next: NextFunction,
+// ) => {
+//   const { success, status_code, message } = err;
+//   const cleanedMessage = message.replace(/"/g, "");
+//   res.status(status_code).json({
+//     success: success || false,
+//     status_code,
+//     message: cleanedMessage,
+//   });
+// };
+
 const errorHandler = (
   err: HttpError,
   _req: Request,
   res: Response,
   _next: NextFunction,
 ) => {
+  // Log the error object for debugging purposes
+  console.error('Error caught by errorHandler:', err);
+
   const { success, status_code, message } = err;
-  const cleanedMessage = message.replace(/"/g, "");
-  res.status(status_code).json({
-    success: success || false,
-    status_code,
+
+  // Fallback to 500 if status_code is undefined
+  const statusCode = status_code || 500;
+
+  // Ensure the message is defined and sanitized
+  const cleanedMessage = message ? message.replace(/"/g, "") : "An unexpected error occurred";
+
+  res.status(statusCode).json({
+    success: success !== undefined ? success : false,  // Ensure success has a valid value
+    status_code: statusCode,
     message: cleanedMessage,
   });
 };
+
 
 export {
   BadRequest,

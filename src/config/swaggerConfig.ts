@@ -14,20 +14,20 @@ const swaggerDefinition: SwaggerDefinition = {
       url: `http://localhost:${config.port}/`,
       description: "Local server",
     },
-    // {
-    //   url: "https://api.staging.aiforhomework.com/",
-    //   description: "Live server",
-    // },
+    {
+      url: "https://polling-api-kappa.vercel.app/",
+      description: "Live server",
+    },
   ],
   tags: [
     {
       name: "default",
       description: "A list of all default routes",
     },
-    {
-      name: "Authentication",
-      description: "A list of routes for Authentication",
-    },
+    // {
+    //   name: "Authentication",
+    //   description: "A list of routes for Authentication",
+    // },
   ],
   components: {
     securitySchemes: {
