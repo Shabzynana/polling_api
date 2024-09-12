@@ -7,8 +7,12 @@ const authService = new PollService();
 const createPoll = asyncHandler(async (req: Request, res: Response) => {
 
     const userId = req.user.user_id;
-    const { title, options } = req.body;
-    const payload = { title, options, userId };
+    const { title } = req.body;
+    // const { title, options } = req.body;
+
+    const payload = { title, userId };
+    // const payload = { title, options, userId };
+
     const { poll, message} = await authService.createPoll(payload);
     sendJsonResponse(res, 201, message, poll)
 

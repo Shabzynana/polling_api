@@ -14,7 +14,8 @@ export class PollService {
 
     public async createPoll(payload: any): Promise<{message: string; poll: Poll; }> {
 
-        const {title, options, userId} = payload;
+        const {title, userId} = payload;
+        // const {title, options, userId} = payload;
         try {
             const user = await this.userRepository.findOne({
               where: { id: userId }, });
