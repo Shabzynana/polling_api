@@ -3,3 +3,7 @@ export type UserResponsePayload = {
     username: string;
     email: string;
   };
+
+  export interface JwtPayload {
+    user_id: string;
+  }

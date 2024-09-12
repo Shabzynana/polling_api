@@ -3,7 +3,7 @@ import express, { Express, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swaggerConfig";
 import { errorHandler, routeNotFound } from "./middleware";
-import { authRoute } from "./routes";
+import { authRoute, pollRoute } from "./routes";
 
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
@@ -35,6 +35,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", authRoute);
+app.use("/api/v1", pollRoute);
+
 
 
 app.use("/openapi.json", (_req: Request, res: Response) => {
