@@ -34,5 +34,36 @@ export class PollService {
                 throw error;
             }
         }
-    }    
+    }
+    
+    public async getPolls(): Promise<{ data: Poll[]; }> {
+        try {
+          const polls = await this.pollRepository.find();
+          if (!polls.length) {
+            throw new ResourceNotFound("No polls found");
+          }
+
+        //   const pollsResponse = polls.map((poll) => formatUser(poll));
+          return { data: polls};
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }      
+        }
+    }
+
+    public async getPollById(id: string): Promise<{ data: Poll; message: string; }> {
+        try {
+            const poll = await this.pollRepository.findOne({
+              where: { id }, });
+            if (!poll) {
+                throw new ResourceNotFound("Poll not found");
+            }
+            return { data: poll, message: "Poll fetched successfully"};
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }      
+        }
+    }
 }
