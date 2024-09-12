@@ -15,7 +15,6 @@ export class PollService {
     public async createPoll(payload: any): Promise<{message: string; poll: Poll; }> {
 
         const {title, userId} = payload;
-        // const {title, options, userId} = payload;
         try {
             const user = await this.userRepository.findOne({
               where: { id: userId }, });
@@ -25,12 +24,8 @@ export class PollService {
 
             const poll = new Poll()
             poll.title = title;
-            // poll.expiresAt = expiresAt;
             poll.author = user;
             const createdPoll = await this.pollRepository.save(poll);
-
-            // const optionEntities = options.map((text: string) => this.optionRepository.create({ text, poll }));
-            // const createdOptions = await this.optionRepository.save(optionEntities);
 
             return {poll: createdPoll, message:"Poll Createed Successfully"}
 
