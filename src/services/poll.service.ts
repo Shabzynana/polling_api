@@ -36,7 +36,7 @@ export class PollService {
         }
     }
     
-    public async getPolls(): Promise<{ polls: PollResponsePayload[]; }> {
+    public async getPolls(): Promise<{ polls: PollResponsePayload[]; message: string; }> {
         try {
           const polls = await this.pollRepository.find();
           if (!polls.length) {
@@ -45,7 +45,7 @@ export class PollService {
 
           const pollsResponse = polls.map((poll) => formatPoll(poll));
 
-          return { polls: pollsResponse};
+          return { polls: pollsResponse, message: "Polls fetched successfully" };
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;

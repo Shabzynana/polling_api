@@ -16,8 +16,8 @@ const createPoll = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getPolls = asyncHandler(async (req: Request, res: Response) => {
-    const polls = await authService.getPolls();
-    sendJsonResponse(res, 200, "Successfully retrieved polls", polls)
+    const {polls, message} = await authService.getPolls();
+    sendJsonResponse(res, 200, message, polls)
 
 });
 
