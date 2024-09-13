@@ -2,8 +2,8 @@ import AppDataSource from "../data-source";
 import { User, Poll, Option } from "../models";
 import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import config from "../config";
-import { formatUser } from "../utils/responsebody";
-import { UserResponsePayload } from "../types";
+import { formatPoll } from "../utils/responsebody";
+import { PollResponsePayload } from "../types";
 
 
 export class PollService {
@@ -36,15 +36,16 @@ export class PollService {
         }
     }
     
-    public async getPolls(): Promise<{ data: Poll[]; }> {
+    public async getPolls(): Promise<{ polls: PollResponsePayload[]; }> {
         try {
           const polls = await this.pollRepository.find();
           if (!polls.length) {
             throw new ResourceNotFound("No polls found");
           }
 
-        //   const pollsResponse = polls.map((poll) => formatUser(poll));
-          return { data: polls};
+          const pollsResponse = polls.map((poll) => formatPoll(poll));
+
+          return { polls: pollsResponse};
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
@@ -52,14 +53,16 @@ export class PollService {
         }
     }
 
-    public async getPollById(id: string): Promise<{ data: Poll; message: string; }> {
+    public async getPollById(id: string): Promise<{ data: PollResponsePayload; message: string; }> {
         try {
             const poll = await this.pollRepository.findOne({
               where: { id }, });
             if (!poll) {
                 throw new ResourceNotFound("Poll not found");
             }
-            return { data: poll, message: "Poll fetched successfully"};
+            const pollResponse = formatPoll(poll);
+
+            return { data: pollResponse, message: "Poll fetched successfully"};
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
