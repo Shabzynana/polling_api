@@ -28,4 +28,4 @@ const getPollById = asyncHandler(async (req: Request, res: Response) => {
 
 });    
 
-export { createPoll, getPollById }
+export { createPoll, getPolls,getPollById }
