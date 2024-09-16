@@ -64,6 +64,7 @@ export class AuthService {
             const access_token = jwt.sign({ user_id: user.id }, config.TOKEN_SECRET, {
                 expiresIn: "1d",
             });
+            console.log({user: "user", access_token: "access_token"})
 
             const userResponse = formatUser(user)
             return {user: userResponse, access_token: access_token, message:"Login Successfull"}
