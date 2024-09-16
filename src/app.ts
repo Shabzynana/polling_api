@@ -26,7 +26,9 @@ app.use(
 // app.use(Limiter);
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ limit: "15mb", extended: true }));
+// app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL }));
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send({

@@ -46,7 +46,7 @@ export class AuthService {
     }
 
 
-    public async login(payload: any): Promise<{message: string; user: Partial<User>; access_token: string; }> {
+    public async login(payload: any): Promise<{message: string; user: UserResponsePayload; access_token: string; }> {
 
         const {email, password} = payload;
         try {
