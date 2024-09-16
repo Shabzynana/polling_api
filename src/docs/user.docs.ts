@@ -1,7 +1,7 @@
 export const getAllUsers = `
 /**
  * @swagger
- * /api/v1/auth/users:
+ * /api/v1/users:
  *   get:
  *     summary: Retrieve all Users
  *     description: Retrieve a list of all users

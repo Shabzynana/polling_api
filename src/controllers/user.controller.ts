@@ -13,5 +13,12 @@ const currentUser =  asyncHandler(async (req: Request, res: Response, next: Next
 
 });
 
-export { currentUser };
+const getUsers = asyncHandler( async (req: Request, res: Response) => {
+   
+    const { data, message} = await userService.getUsers();
+    sendJsonResponse(res, 200, message, data);
+  
+});
+
+export { currentUser, getUsers };
 

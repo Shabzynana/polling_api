@@ -29,13 +29,6 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-const getUsers = asyncHandler( async (req: Request, res: Response) => {
-   
-    const { data, message} = await authService.getUsers();
-    sendJsonResponse(res, 200, message, data);
-  
-});
 
 
-
-export { signUp, login, getUsers};
+export { signUp, login};

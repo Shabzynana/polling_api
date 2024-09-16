@@ -21,6 +21,25 @@ export class UserService {
         return {user: userResponse, message:"Current logedIn User"}
     }
 
+    public async getUsers(): Promise<{ data: UserResponsePayload[]; message: string; }> {
+        try {    
+          const users = await this.userRepository.find();
+          console.log(users, "users")
+          if (!users.length) {
+            throw new ResourceNotFound("No users found");
+          }
+          
+          const usersResponse = users.map((user) => formatUser(user));
+          return { data: usersResponse, message: "Users fetched successfully" };
+          
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }      
+        }
+    }
+
+
 
 
 

@@ -2,7 +2,7 @@ import { Router } from "express"
 import { validateData } from "../middleware";
 import { signupSchema, loginSchema } from "../schemas/authSchema";
 import {
-  signUp, login, getUsers
+  signUp, login
 } from "../controllers";
 
 const authRoute = Router();
@@ -19,10 +19,5 @@ authRoute.post(
   login
 );
 
-authRoute.get(
-  "/auth/users", 
-  // validateData(loginSchema), 
-  getUsers
-);
 
 export { authRoute };
