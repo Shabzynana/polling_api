@@ -74,7 +74,7 @@ export class AuthService {
         }   
     }
     
-    public async getUsers(): Promise<{ data: UserResponsePayload[]; }> {
+    public async getUsers(): Promise<{ data: UserResponsePayload[]; message: string; }> {
         try {
           const userRepository = AppDataSource.getRepository(User);
     
@@ -85,7 +85,7 @@ export class AuthService {
           }
           
           const usersResponse = users.map((user) => formatUser(user));
-          return { data: usersResponse};
+          return { data: usersResponse, message: "Users fetched successfully" };
           
         } catch (error) {
             if (error instanceof HttpError) {

@@ -22,9 +22,8 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 const getUsers = asyncHandler( async (req: Request, res: Response) => {
    
-    const users = await authService.getUsers();
-    const allusers = { users };
-    sendJsonResponse(res, 200, "Successfully retrieved users", allusers);
+    const { data, message} = await authService.getUsers();
+    sendJsonResponse(res, 200, message, data);
   
 });
 
