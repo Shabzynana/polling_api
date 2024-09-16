@@ -53,10 +53,10 @@ export class PollService {
         }
     }
 
-    public async getPollById(id: string): Promise<{ data: PollResponsePayload; message: string; }> {
+    public async getPollById(pollId: string): Promise<{ data: PollResponsePayload; message: string; }> {
         try {
             const poll = await this.pollRepository.findOne({
-              where: { id }, });
+              where: { id: pollId }, });
             if (!poll) {
                 throw new ResourceNotFound("Poll not found");
             }

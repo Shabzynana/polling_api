@@ -22,8 +22,8 @@ const getPolls = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getPollById = asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const {data, message} = await authService.getPollById(id);
+    const  pollId  = req.params.id;
+    const {data, message} = await authService.getPollById(pollId);
     sendJsonResponse(res, 200, message, data)
 
 });    

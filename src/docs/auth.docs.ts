@@ -60,7 +60,7 @@ export const login = `
  * @swagger
  * /api/v1/auth/login:
  *   post:
- *     summary: Sign up a new user
+ *     summary: login an existing user
  *     tags: [Authentication]
  *     requestBody:
  *       required: true

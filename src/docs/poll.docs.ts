@@ -3,7 +3,7 @@ export const createdPoll = `
  * @swagger
  * /api/v1/poll:
  *   post:
- *     summary: Sign up a new user
+ *     summary: Create a new poll
  *     tags: [Poll]
  *     requestBody:
  *       required: true
@@ -90,108 +90,63 @@ export const getAllPolls = `
  */
 `;
 
-export const getPollById = `
+
+export const Poll = `
 /**
  * @swagger
  * /api/v1/poll/{id}:
  *   get:
- *     summary: Get an Poll by ID
- *     description: Retrieves the details of a specific Poll by its ID. This endpoint can be accessed by any authenticated user.
+ *     summary: Fetch a poll by its ID
  *     tags: [Poll]
+ *     description: Retrieve a single poll by its unique ID
  *     parameters:
  *       - in: path
- *         name: PollId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The ID of the Poll entry to retrieve
+ *           format: uuid
+ *         description: The unique ID of the poll to fetch
  *     responses:
- *       '200':
- *         description: Poll retrieved successfully.
+ *       200:
+ *         description: Poll fetched successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Poll fetched successfully
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
  *                 data:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: string
- *                       example: "5f8d0d55b54764421b7156c6"
+ *                       format: uuid
+ *                       example: 019b28f1-ae6a-4061-9dc7-71fa659ece43
  *                     title:
  *                       type: string
- *                       example: "Presidential Poll"
+ *                       example: What is your favorite programming language?
  *                     created_at:
  *                       type: string
  *                       format: date-time
- *                       example: "2024-08-13T06:44:06.248Z"
- *       '400':
- *         description: Invalid request data.
+ *                       example: 2024-09-12T16:48:03.235Z
+ *       404:
+ *         description: Poll not found
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
  *                 message:
  *                   type: string
- *                   example: Invalid request data
- *                 status_code:
- *                   type: integer
- *                   example: 400
- *       '403':
- *         description: Unauthorized access.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: "Authorization required. Not an admin"
- *                 status_code:
- *                   type: integer
- *                   example: 403
- *       '404':
- *         description: FAQ not found.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Poll not found.
+ *                   example: Poll not found
  *                 status_code:
  *                   type: integer
  *                   example: 404
- *       '500':
- *         description: Internal server error.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Retrieval failed
- *                 status_code:
- *                   type: integer
- *                   example: 500
  */
 `;
