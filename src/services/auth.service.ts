@@ -66,6 +66,7 @@ export class AuthService {
             });
 
             const userResponse = formatUser(user)
+            console.log(userResponse, "userResponse")
             return {user: userResponse, access_token: access_token, message:"Login Successfull"}
         } catch (error) {
             if (error instanceof HttpError) {
@@ -74,25 +75,6 @@ export class AuthService {
         }   
     }
     
-    public async getUsers(): Promise<{ data: UserResponsePayload[]; message: string; }> {
-        try {
-          const userRepository = AppDataSource.getRepository(User);
-    
-          const users = await userRepository.find();
-          console.log(users, "users")
-          if (!users.length) {
-            throw new ResourceNotFound("No users found");
-          }
-          
-          const usersResponse = users.map((user) => formatUser(user));
-          return { data: usersResponse, message: "Users fetched successfully" };
-          
-        } catch (error) {
-            if (error instanceof HttpError) {
-                throw error;
-            }      
-        }
-    }
 
 
 
