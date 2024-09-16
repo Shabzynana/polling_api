@@ -7,7 +7,7 @@ const pollRoute = Router();
 
 pollRoute.post(
     "/poll",
-    // validateData(pollSchema),
+    // validateData(pollSchema),s
     authMiddleware,
     createPoll
 );
