@@ -3,6 +3,7 @@ import { User } from "../models";
 import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import { formatUser } from "../utils/responsebody";
 import { UserResponsePayload } from "../types";
+import log from "../utils/logger";
 
 export class UserService {
 
@@ -24,7 +25,7 @@ export class UserService {
     public async getUsers(): Promise<{ data: UserResponsePayload[]; message: string; }> {
         try {    
           const users = await this.userRepository.find();
-          console.log(users, "users")
+          log.info(users, 'user details')
           if (!users.length) {
             throw new ResourceNotFound("No users found");
           }
