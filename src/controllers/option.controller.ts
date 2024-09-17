@@ -16,5 +16,14 @@ const createOptionsForPoll = asyncHandler(async (req: Request, res: Response) =>
     sendJsonResponse(res, 201, message, option)
 });
 
+const getOptionsForPoll = asyncHandler(async (req: Request, res: Response) => {
 
-export { createOptionsForPoll }
+    const { pollId } = req.params;
+    const { data, message} = await optionService.getOptionsForPoll(pollId);
+  
+    sendJsonResponse(res, 200, message, data)
+
+});
+
+
+export { createOptionsForPoll, getOptionsForPoll }
