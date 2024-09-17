@@ -5,8 +5,7 @@ import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
-import { UserResponsePayload } from "../types";
-
+import log from "../utils/logger";
 
 export class AuthService {
 
@@ -66,7 +65,7 @@ export class AuthService {
             });
 
             const userResponse = formatUser(user)
-            console.log(userResponse, "userResponse")
+            log.info( ["userResponse", userResponse])   
             return {user: userResponse, access_token: access_token, message:"Login Successfull"}
         } catch (error) {
             if (error instanceof HttpError) {

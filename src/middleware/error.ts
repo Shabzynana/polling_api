@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import log from "../utils/logger";
+
 
 class HttpError extends Error {
   status_code: number;
@@ -80,7 +82,7 @@ const errorHandler = (
   _next: NextFunction,
 ) => {
   // Log the error object for debugging purposes
-  console.error('Error caught by errorHandler:', err);
+  log.error('Error caught by errorhandler:', err);
 
   const { success, status_code, message } = err;
 
