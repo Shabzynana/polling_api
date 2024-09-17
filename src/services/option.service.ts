@@ -14,12 +14,12 @@ export class OptionService {
     public optionRepository = AppDataSource.getRepository(Option);
 
 
-    public async createOptionsForPoll(payload: any): Promise<{message: string; option: Option; }> {
+    public async createOptionsForPoll(payload: any): Promise<{message: string; option: Partial<Option>; }> {
 
         const {text, pollId} = payload;
         try {
             const poll = await this.pollRepository.findOne({
-              where: { id: pollId }, });
+              where: { id: pollId } });
             if (!poll) {
                 throw new Conflict("Poll not found");
             }
@@ -27,15 +27,31 @@ export class OptionService {
             const option = new Option()
             option.text = text;
             option.poll = poll;
-            const createdOption = await this.optionRepository.save(option);
 
+            const createdOption = await this.optionRepository.save(option);
             return {option: createdOption, message:"Option Createed Successfully"}
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
             }
         }       
-    }    
+    }   
+    
+    
+    public async getOptionsForPoll(pollId: string): Promise<{ data: Poll; message: string; }> {
+        try {
+            const options = await this.pollRepository.findOne({
+              where: { id: pollId }, relations : { options: true } });
+            if (!options) {
+                throw new ResourceNotFound("Options not found");
+            }
+            return { data: options, message: "Options fetched successfully" };
+        } catch (error) {
+            if (error instanceof HttpError) {
+                throw error;
+            }
+        }
+    }
 
 
 }    

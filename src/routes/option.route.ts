@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateData, authMiddleware } from "../middleware";
-import { createOptionsForPoll } from "../controllers";
+import { createOptionsForPoll, getOptionsForPoll } from "../controllers";
 // import { pollSchema } from "../schemas/pollSchema";
 
 const optionRoute = Router();
@@ -10,6 +10,12 @@ optionRoute.post(
     // validateData(pollSchema),
     authMiddleware,
     createOptionsForPoll
+);
+
+optionRoute.get(
+    "/poll/:pollId/options",
+    authMiddleware,
+    getOptionsForPoll
 );
 
 export { optionRoute }
