@@ -59,5 +59,26 @@ export class VoteService {
     }
 
 
+    public async getPollresults(pollId: string): Promise<{data: any; message: string;}> {
+
+        const poll = await this.pollRepository.findOne({
+            where: { id: pollId },
+            relations: [ 'options', 'options.votes' ],
+        });
+        if (!poll) {
+            throw new ResourceNotFound("Poll not found");
+        }
+
+        const results = poll.options.map(option => ({
+            optionId: option.id,
+            text: option.text,
+            votes: option.votes ? option.votes.length : 0,
+          }));
+      
+        return { data: results, message: "Final Result" };
+
+    }
+
+
 
 }

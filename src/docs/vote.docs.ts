@@ -71,3 +71,74 @@ export const createVote = `
  *                   example: 400
  */
 `;
+
+
+
+export const getPollresults = `
+/**
+ * @swagger
+ * /api/v1/poll/{pollId}/results:
+ *   get:
+ *     summary: Get the results of a specific poll
+ *     tags: [Vote]
+ *     description: Retrieve the vote results for a specific poll by its ID
+ *     parameters:
+ *       - in: path
+ *         name: pollId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The ID of the poll for which to retrieve results
+ *     responses:
+ *       200:
+ *         description: Poll results fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Poll results fetched successfully
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     pollId:
+ *                       type: string
+ *                       format: uuid
+ *                       example: 019b28f1-ae6a-4061-9dc7-71fa659ece43
+ *                     results:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           option_id:
+ *                             type: string
+ *                             format: uuid
+ *                             example: d7636d3d-b06e-4847-9072-9a376382ba22
+ *                           option_text:
+ *                             type: string
+ *                             example: JavaScript
+ *                           votes:
+ *                             type: integer
+ *                             example: 42
+ *       404:
+ *         description: Poll not found or no results available
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Poll not found
+ *                 status_code:
+ *                   type: integer
+ *                   example: 404
+ */
+`;
+
