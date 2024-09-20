@@ -16,4 +16,12 @@ const createVote = asyncHandler(async (req: Request, res: Response) => {
 
 });
 
-export { createVote }
+const getPollresults = asyncHandler(async (req: Request, res: Response) => {
+
+    const pollId = req.params.id;
+    const { data, message } = await voteService.getPollresults(pollId)
+    sendJsonResponse(res, 200, message, data)
+
+})
+
+export { createVote, getPollresults }
