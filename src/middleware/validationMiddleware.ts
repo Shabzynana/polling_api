@@ -17,7 +17,7 @@ export function validateData(
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessages = error.errors.map((issue: any) => ({
-          message: `${issue.path.join(".")} is ${issue.message}`,
+          message: `${issue.message}`,
         }));
         res.status(422).json({ errors: errorMessages });
       } else {

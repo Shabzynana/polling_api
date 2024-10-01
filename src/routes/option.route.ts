@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { validateData, authMiddleware } from "../middleware";
+import { validateData, authMiddleware, checkPermission } from "../middleware";
 import { createOptionsForPoll, getOptionsForPoll } from "../controllers";
-// import { pollSchema } from "../schemas/pollSchema";
+import { UserType } from "../models";
+import { optionSchema } from "../schemas/optionSchema";
 
 const optionRoute = Router();
 
 optionRoute.post(
     "/poll/:pollId/option",
-    // validateData(pollSchema),
+    validateData(optionSchema),
     authMiddleware,
+    checkPermission(UserType.ADMIN),
     createOptionsForPoll
 );
 

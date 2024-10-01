@@ -15,7 +15,6 @@ const loginSchema = z.object({
 })
 
 
-
 export {
   signupSchema, loginSchema
 };
