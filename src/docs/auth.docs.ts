@@ -21,6 +21,15 @@ export const signUp = `
  *               password:
  *                 type: string
  *                 example: strongpassword123
+ *               first_name:
+ *                 type: string
+ *                 example: John
+ *               last_name:
+ *                 type: string
+ *                 example: Doe
+ *               admin_secret:
+ *                 type: string
+ *                 example: your-secret-key
  *     responses:
  *       201:
  *         description: The user was successfully created
@@ -46,6 +55,8 @@ export const signUp = `
  *                         username:
  *                           type: string
  *                         email:
+ *                           type: string
+ *                         user-type:
  *                           type: string
  *       409:
  *         description: User already exists

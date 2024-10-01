@@ -5,6 +5,7 @@ const config = {
   port: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   BASE_URL: process.env.BASE_URL,
+  ADMIN_SECRET_KEY: process.env.ADMIN_SECRET_KEY,
   "api-prefix": "api/v1",
   POSTGRES_HOST: process.env.POSTGRES_HOST,
   POSTGRES_PORT: process.env.POSTGRES_PORT,
