@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { validateData, authMiddleware } from "../middleware";
+import { validateData, authMiddleware, checkPermission } from "../middleware";
 import { createPoll, getPolls, getPollById } from "../controllers";
-// import { pollSchema } from "../schemas/pollSchema";
+import { UserType } from "../models";
+import { pollSchema } from "../schemas/pollSchema";
 
 const pollRoute = Router();
 
 pollRoute.post(
     "/poll",
-    // validateData(pollSchema),s
+    validateData(pollSchema),
     authMiddleware,
+    checkPermission(UserType.ADMIN),
     createPoll
 );
 

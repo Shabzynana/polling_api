@@ -7,6 +7,7 @@ export const formatUser = (user: User): UserResponsePayload => {
     id: user.id,
     username: user.username,
     email: user.email,
+    user_type: user.user_type,
   };
 };
 

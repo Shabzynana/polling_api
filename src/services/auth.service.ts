@@ -1,21 +1,22 @@
 import AppDataSource from "../data-source";
-import { User } from "../models";
+import { User, UserType } from "../models";
 import { hashPassword, comparePassword } from "../utils";
 import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
 import log from "../utils/logger";
+import { IUserSignUp } from "../types";
 
 export class AuthService {
 
-    public async signUp(payload: any): Promise<{message: string; user: Partial<User>; }> {
+    public async signUp(payload: IUserSignUp): Promise<{message: string; user: Partial<User>; }> {
 
-        const {username, email, password} = payload;
+        const {username, email, admin_secret, first_name, last_name, password}  = payload;
+
         try {
             const userExist = await User.findOne({
               where: { email }, });
-            console.log(userExist, "user")  
             if (userExist) {
                 throw new Conflict("User already exists");
             }
@@ -28,14 +29,20 @@ export class AuthService {
 
             const hashedPassword = await hashPassword(password)
             const user = new User()
+            user.first_name = first_name
+            user.last_name = last_name
             user.username = username;
             user.email = email;
             user.password = hashedPassword;
+            user.user_type = (admin_secret && admin_secret === config.ADMIN_SECRET_KEY ) ? UserType.ADMIN : UserType.USER;
 
             const createdUser = await AppDataSource.manager.save(user);
             const userResponse = formatUser(createdUser);
 
-            return {user: userResponse, message:"User Createed Successfully"}
+            return {
+                user: userResponse, 
+                message:"User Createed Successfully"
+            }
 
         } catch (error) {
             if (error instanceof HttpError) {
@@ -66,7 +73,11 @@ export class AuthService {
 
             const userResponse = formatUser(user)
             log.info( ["userResponse", userResponse])   
-            return {user: userResponse, access_token: access_token, message:"Login Successfull"}
+            return {
+                user: userResponse, 
+                access_token: access_token, 
+                message:"Login Successfull"
+            }
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;

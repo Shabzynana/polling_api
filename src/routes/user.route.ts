@@ -13,7 +13,6 @@ userRoute.get(
 userRoute.get(
     "/users",
     authMiddleware,
-    // validateData(loginSchema), 
     getUsers
 );
       
