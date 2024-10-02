@@ -29,6 +29,16 @@ export class User extends ExtendedBaseEntity {
   @Column()
   password: string;
 
+  @Column({ default: false })
+  is_verified: boolean;
+
+  @Column({ nullable: true })
+  is_verified_date: Date;
+
+  // Soft delete flag
+  @Column({ default: false })
+  is_deleted: boolean;
+
   @OneToMany(() => Poll, (poll) => poll.author)
   polls: Poll[];
 

@@ -29,6 +29,15 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
+const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
+
+    const token = req.query.token as string;
+    const {user, message} = await authService.verifyEmail(token);
+    sendJsonResponse(res, 200, message, user)
+
+});    
 
 
-export { signUp, login};
+
+
+export { signUp, login, verifyEmail};
