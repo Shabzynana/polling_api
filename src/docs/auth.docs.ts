@@ -201,4 +201,148 @@ export const verifyEmail = `
 `;
 
 
+export const forgotPassword = `
+/**
+ * @swagger
+ * /api/v1/auth/forgot-password:
+ *   post:
+ *     summary: Forgot password
+ *     tags: [Authentication]
+ *     description: Sends a password reset link to the provided email address.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: johndoe@example.com
+ *     responses:
+ *       200:
+ *         description: Password reset link sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password reset link sent to your email
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: d7636d3d-b06e-4847-9072-9a376382ba22
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: johndoe@example.com
+ *                     username:
+ *                       type: string
+ *                       example: John
+ *                     user_type:
+ *                       type: string
+ *       400:
+ *         description: Bad Request - Email is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Email is required
+ *                 status_code:
+ *                   type: integer
+ *                   example: 400
+ */
+`;
+
+
+export const resetPassword = `
+/**
+ * @swagger
+ * /api/v1/auth/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     tags: [Authentication]
+ *     description: Resets the password using a provided token.
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The password reset token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               new_password:
+ *                 type: string
+ *                 format: password
+ *                 example: newPassword123
+ *               confirm_password:
+ *                 type: string
+ *                 format: password
+ *                 example: newPassword123
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password reset successfully
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: d7636d3d-b06e-4847-9072-9a376382ba22
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: johndoe@example.com
+ *                     username:
+ *                       type: string
+ *                       example: John
+ *                     user_type:
+ *                       type: string
+ *       400:
+ *         description: Bad Request - Token is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Token is required
+ *                 status_code:
+ *                   type: integer
+ *                   example: 400
+ */
+`;
+
+
+
 
