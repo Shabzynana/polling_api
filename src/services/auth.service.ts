@@ -1,14 +1,17 @@
 import AppDataSource from "../data-source";
 import { User, UserType } from "../models";
 import { hashPassword, comparePassword } from "../utils";
-import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
+import { Conflict, HttpError, ResourceNotFound, Unauthorized } from "../middleware";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
 import log from "../utils/logger";
-import { IUserSignUp } from "../types";
+import { IUserSignUp, JwtPayload } from "../types";
+import sendEmailTemplate from "../views/email/sendEmailTemplate";
 
 export class AuthService {
+
+    public userRepository = AppDataSource.getRepository(User)
 
     public async signUp(payload: IUserSignUp): Promise<{message: string; user: Partial<User>; }> {
 
@@ -18,6 +21,12 @@ export class AuthService {
             const userExist = await User.findOne({
               where: { email }, });
             if (userExist) {
+                if (userExist.is_deleted) {
+                    throw new HttpError(
+                        403,
+                        "Account associated with these email has been deleted. Please contact support for assistance.",
+                      );
+                }
                 throw new Conflict("User already exists");
             }
 
@@ -37,6 +46,18 @@ export class AuthService {
             user.user_type = (admin_secret && admin_secret === config.ADMIN_SECRET_KEY ) ? UserType.ADMIN : UserType.USER;
 
             const createdUser = await AppDataSource.manager.save(user);
+
+            const sendToken = jwt.sign({ user_id: user.id }, config.TOKEN_SECRET, {expiresIn: "1h" });
+            const verifyUrl = `${config.BASE_URL}/verify_email?token=${sendToken}`;
+            await sendEmailTemplate({
+                to: email,
+                subject: "Verify your Email",
+                templateName: "verify_email",
+                variables: {
+                  name: user?.last_name,
+                  verifyUrl,
+                },
+            });
             const userResponse = formatUser(createdUser);
 
             return {
@@ -83,6 +104,39 @@ export class AuthService {
                 throw error;
             }        
         }   
+    }
+
+
+    public async verifyEmail(token: string): Promise<{ message: string; user: Partial<User>; }> {
+        try {
+            const payload = jwt.verify(token, config.TOKEN_SECRET) as JwtPayload;
+            const user = await this.userRepository.findOne({
+                where: { id: payload["user_id"] as string },
+            });
+            console.log(user, 'user')
+            if (!user) {
+                throw new HttpError(404, "User not Found");
+            }
+        
+            user.is_verified = true;
+            user.is_verified_date = new Date();
+            await this.userRepository.save(user);
+            console.log(user, "verified User")
+            return {
+                message: "Email verified successfully",
+                user: formatUser(user),
+            };
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new Unauthorized("Token has expired");
+            } else if (error.name === 'JsonWebTokenError') {
+                throw new Unauthorized("Invalid token");
+            } else {
+                if(error instanceof HttpError) {
+                    throw error;
+                } 
+            }
+        } 
     }
     
 

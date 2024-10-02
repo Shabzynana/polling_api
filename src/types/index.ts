@@ -10,6 +10,13 @@ export interface IUserSignUp {
   admin_secret?: string;
 }
 
+export interface EmailData {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}
+
 export type UserResponsePayload = {
   id: string;
   username: string;
