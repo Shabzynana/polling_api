@@ -38,6 +38,31 @@ const verifyEmail = asyncHandler(async (req: Request, res: Response) => {
 });    
 
 
+const forgotPassword = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const {email} = req.body;
+    if (!email) {
+        return sendJsonResponse(res, 400, "Email is required");
+    }
+
+    const { message, data } = await authService.forgotPassword(email);
+    sendJsonResponse(res, 200, message, data);
+    
+})
 
 
-export { signUp, login, verifyEmail};
+const resetPassword = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.query.token as string;
+    const { new_password, confirm_password } = req.body;
+
+    if (!token) {
+        return sendJsonResponse(res, 400, "Token is required");
+    }
+
+    const { message, data } = await authService.resetPassword(token, new_password, confirm_password);
+    sendJsonResponse(res, 200, message, data );
+})
+
+
+
+
+export { signUp, login, verifyEmail, forgotPassword, resetPassword};

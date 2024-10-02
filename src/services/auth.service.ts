@@ -138,6 +138,75 @@ export class AuthService {
             }
         } 
     }
+
+
+
+    public async forgotPassword(email: string): Promise<{message: string; data: Partial<User>}> {
+        const user = await this.userRepository.findOne({
+            where: { email },
+        });
+        if (!user) {
+            throw new ResourceNotFound("User not found");
+        }
+        const sendToken = jwt.sign({ user_id: user.id }, config.TOKEN_SECRET, {expiresIn: "1h" });
+        const resetUrl = `${config.BASE_URL}/reset-password?token=${sendToken}`;
+        await sendEmailTemplate({
+            to: email,
+            subject: "Reset your password",
+            templateName: "password-reset",
+            variables: {
+              name: user?.last_name,
+              resetUrl,
+            },  
+        });  
+        
+        return { 
+            message: "Password reset link sent to your email", 
+            data: formatUser(user)
+        }
+    }
+
+
+    public async resetPassword(
+        token: string,
+        new_password: string,
+        confirm_password: string): Promise<{message: string; data: Partial<User>}> {
+
+        try {
+            const payload = jwt.verify(token, config.TOKEN_SECRET) as JwtPayload;
+            const user = await this.userRepository.findOne({
+                where: { id: payload["user_id"] as string },
+            });
+            if (!user) {
+                throw new ResourceNotFound("User not Found");
+            }
+
+            if (new_password !== confirm_password) {
+                throw new HttpError(400, "Passwords do not match");
+            }
+            const hashedPassword = await hashPassword(new_password);
+            user.password = hashedPassword;
+            await AppDataSource.manager.save(user);
+            return {
+                message: "Password reset successfully",
+                data: formatUser(user)
+            };
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new Unauthorized("Token has expired");
+            } else if (error.name === 'JsonWebTokenError') {
+                throw new Unauthorized("Invalid token");
+            } else {
+                if(error instanceof HttpError) {
+                    throw error;
+                } 
+            }      
+        }
+
+        
+    }
+
+
     
 
 

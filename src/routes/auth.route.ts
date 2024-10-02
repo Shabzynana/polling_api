@@ -2,7 +2,7 @@ import { Router } from "express"
 import { validateData } from "../middleware";
 import { signupSchema, loginSchema } from "../schemas/authSchema";
 import {
-  signUp, login, verifyEmail
+  signUp, login, verifyEmail, forgotPassword, resetPassword
 } from "../controllers";
 
 const authRoute = Router();
@@ -22,6 +22,16 @@ authRoute.post(
 authRoute.get(
   "/auth/verify-email",
   verifyEmail
+)
+
+authRoute.post(
+  "/auth/forgot-password",
+  forgotPassword
+)    
+
+authRoute.post(
+  "/auth/reset-password",
+  resetPassword
 )
 
 
