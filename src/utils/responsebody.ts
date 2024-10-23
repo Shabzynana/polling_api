@@ -1,5 +1,5 @@
-import { User, Poll } from "../models";
-import { UserResponsePayload, PollResponsePayload } from "../types";
+import { User, Poll, Option } from "../models";
+import { UserResponsePayload, PollResponsePayload, PollPayload, OptionResponsePayload } from "../types";
 
 
 export const formatUser = (user: User): UserResponsePayload => {
@@ -16,6 +16,24 @@ export const formatPoll = (poll: Poll): PollResponsePayload => {
     id: poll.id,
     title: poll.title,
     created_at: poll.created_at,
+  };
+};
+
+export const formatPollPayload = (poll: Poll): PollPayload => {
+  return {
+    id: poll.id,
+    title: poll.title,
+    created_at: poll.created_at,
+    author: formatUser(poll.author),
+  };
+};
+
+export const formatOption = (option: Option): OptionResponsePayload => {
+  return {
+    id: option.id,
+    text: option.text,
+    created_at: option.created_at,
+    poll: formatPoll(option.poll),
   };
 };
 
