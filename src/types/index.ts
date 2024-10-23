@@ -33,4 +33,23 @@ export type PollResponsePayload = {
   id: string;
   title: string;
   created_at: Date;
+
 };
+
+export type PollPayload = {
+
+  id: string;
+  title: string;
+  created_at: Date;
+  author: UserResponsePayload;
+
+}
+
+export type OptionResponsePayload = {
+  id: string;
+  text: string;
+  created_at: Date;
+  poll: PollResponsePayload
+
+}  
+ 

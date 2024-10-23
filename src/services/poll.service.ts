@@ -2,8 +2,8 @@ import AppDataSource from "../data-source";
 import { User, Poll, Option } from "../models";
 import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import config from "../config";
-import { formatPoll } from "../utils/responsebody";
-import { PollResponsePayload } from "../types";
+import { formatPoll, formatPollPayload } from "../utils/responsebody";
+import { PollResponsePayload, PollPayload } from "../types";
 
 
 export class PollService {
@@ -12,7 +12,7 @@ export class PollService {
     public pollRepository = AppDataSource.getRepository(Poll);
     public optionRepository = AppDataSource.getRepository(Option);
 
-    public async createPoll(payload: any): Promise<{message: string; poll: Poll; }> {
+    public async createPoll(payload: any): Promise<{message: string; poll: PollPayload; }> {
 
         const {title, userId} = payload;
         try {
@@ -27,7 +27,7 @@ export class PollService {
             poll.author = user;
             const createdPoll = await this.pollRepository.save(poll);
 
-            return {poll: createdPoll, message:"Poll Createed Successfully"}
+            return {poll: formatPollPayload(createdPoll), message:"Poll Createed Successfully"}
 
         } catch (error) {
             if (error instanceof HttpError) {

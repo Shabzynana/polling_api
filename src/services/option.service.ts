@@ -2,8 +2,8 @@ import AppDataSource from "../data-source";
 import { User, Poll, Option } from "../models";
 import { Conflict, HttpError, ResourceNotFound, } from "../middleware";
 import config from "../config";
-import { formatUser } from "../utils/responsebody";
-import { UserResponsePayload } from "../types";
+import { formatOption } from "../utils/responsebody";
+import { OptionResponsePayload } from "../types";
 
 
 
@@ -14,7 +14,7 @@ export class OptionService {
     public optionRepository = AppDataSource.getRepository(Option);
 
 
-    public async createOptionsForPoll(payload: any): Promise<{message: string; option: Partial<Option>; }> {
+    public async createOptionsForPoll(payload: any): Promise<{message: string; option: OptionResponsePayload }> {
 
         const {text, pollId} = payload;
         try {
@@ -29,7 +29,10 @@ export class OptionService {
             option.poll = poll;
 
             const createdOption = await this.optionRepository.save(option);
-            return {option: createdOption, message:"Option Createed Successfully"}
+            return {
+                option: formatOption(createdOption), 
+                message:"Option Createed Successfully"
+            }
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
@@ -45,7 +48,10 @@ export class OptionService {
             if (!options) {
                 throw new ResourceNotFound("Options not found");
             }
-            return { data: options, message: "Options fetched successfully" };
+            return { 
+                data: options, 
+                message: "Options fetched successfully" 
+            };
         } catch (error) {
             if (error instanceof HttpError) {
                 throw error;
