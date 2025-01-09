@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Response } from "express";
+import { io } from "../app";
 
 /**
  * Sends a JSON response with a standard structure.
@@ -29,5 +30,8 @@ const sendJsonResponse = (
 
   res.status(statusCode).json(responsePayload);
 };
+
+// console.log("indexttt", !!io)         
+
 
 export { sendJsonResponse };

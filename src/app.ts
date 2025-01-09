@@ -1,15 +1,43 @@
-import cors from "cors";
+console.log("Initializing application...");
+
 import express, { Express, Request, Response } from "express";
+import { initializeSocket } from "./middleware/io";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swaggerConfig";
 import { errorHandler, routeNotFound } from "./middleware";
 import { authRoute, pollRoute, optionRoute, userRoute, voteRoute } from "./routes";
+import http from 'http';
+import path from 'path';
+import cors from "cors";
 
-// const CSS_URL =
-//   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
+
+
 
 const app: Express = express();
+const server = http.createServer(app);
+
+const io = initializeSocket(server);
+
+
 app.options("*", cors());
+
+
+
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+//     allowedHeaders: [
+//       "Origin",
+//       "X-Requested-With",
+//       "Content-Type",
+//       "Authorization",
+//     ],
+//   },
+// // });
+
+// console.log( 'io runnung', !!initializeSocket())
+
 app.use(
   cors({
     origin: "*",
@@ -23,14 +51,15 @@ app.use(
   }),
 );
 
+
 // app.use(Limiter);
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ limit: "15mb", extended: true }));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-// app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL }));
 
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/home", (req: Request, res: Response) => {
   res.send({
     message: "I am the express API responding for Polling System",
   });
@@ -51,4 +80,8 @@ app.use("/openapi.json", (_req: Request, res: Response) => {
 app.use(errorHandler);
 app.use(routeNotFound);
 
-export default app;
+console.log("index app.ts", !!io)
+
+
+export { app, server, io };
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Polling</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Real-Time Polling</h1>
+  <div id="poll-updates">Waiting for updates...</div>
+
+  <script>
+    const socket = io('http://localhost:8000');
+
+    // socket.on('connect', (data) => {
+    //   console.log('Connected to the server!');
+    // });
+
+    socket.on('vote-updated', (dataArray) => {
+      console.log('Connected to the server!');
+      console.log('Votes updated:', dataArray);
+      const updatesContainer = document.getElementById('poll-updates');
+  
+      // Clear previous content
+      updatesContainer.textContent = '';
+
+     // Iterate through the array and display each update
+      dataArray.forEach((data) => {
+        const updateText = `Poll ID: ${data.pollId}, Option ID: ${data.optionId}, Votes: ${data.voteCount}`;
+        const updateElement = document.createElement('div');
+        updateElement.textContent = updateText;
+        updatesContainer.appendChild(updateElement);
+      });
+    });
+
+
+    // socket.on('vote-updated', (data) => {
+    //   console.log('Vote updated:', data);
+    //   document.getElementById('poll-updates').textContent = 
+    //     `Poll ID: ${data.pollId}, Option ID: ${data.optionId}, Votes: ${data.voteCount}`;
+    // });
+
+    
+  </script>
+</body>
+</html>
