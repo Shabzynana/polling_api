@@ -32,7 +32,7 @@ export const initializeSocket = (server: HTTPServer) => {
       });
 
       // Handle vote updates
-      socket.on("vote_update", (data: { pollId: string; optionId: string }) => {
+      socket.on("vote_updated", (data: { pollId: string; optionId: string }) => {
         socket.to(data.pollId).emit("vote_received", data);
       });
 
