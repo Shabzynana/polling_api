@@ -6,7 +6,6 @@ import config from "../config";
 import { formatUser } from "../utils/responsebody";
 import { UserResponsePayload } from "../types";
 import type { Server } from 'socket.io';
-// import { io } from "../app";;
 
 
 
