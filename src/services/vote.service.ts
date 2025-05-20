@@ -83,6 +83,8 @@ export class VoteService {
             if (error instanceof HttpError) {
                 throw error;
             }
+            console.error("Unexpected error in createVote:", error);
+            throw new Error("Internal Server Error");
         }       
     }
 
