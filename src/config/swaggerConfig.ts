@@ -27,10 +27,6 @@ const swaggerDefinition: SwaggerDefinition = {
       description: "staging server",
     },
     {
-      url: "https://polling-api-kappa.vercel.app/",
-      description: "Live server",
-    },
-    {
       url: "https://polling-api-4p2v.onrender.com/",
       description: "Live server",
     },
@@ -40,10 +36,6 @@ const swaggerDefinition: SwaggerDefinition = {
       name: "default",
       description: "A list of all default routes",
     },
-    // {
-    //   name: "Authentication",
-    //   description: "A list of routes for Authentication",
-    // },
   ],
   components: {
     securitySchemes: {
@@ -64,16 +56,38 @@ const swaggerDefinition: SwaggerDefinition = {
   },
 };
 
+const isProd = process.env.NODE_ENV === "production";
+const apis = isProd
+  ? [
+      "./dist/routes/*.js",
+      "./dist/controllers/*.js",
+      "./dist/services/*.js",
+      "./dist/schema/*.js",
+      "./dist/docs/*.js",
+    ]
+  : [
+      "./src/routes/*.ts",
+      "./src/controllers/*.ts",
+      "./src/services/*.ts",
+      "./src/schema/*.ts",
+      "./src/docs/*.ts",
+    ];
+
 const options = {
   swaggerDefinition,
-  apis: [
-    "./src/routes/*.ts",
-    "./src/controllers/*.ts",
-    "./src/services/*.ts",
-    "./src/schema/*.ts",
-    "./src/docs/*.ts",
-  ],
+  apis,
 };
+
+// const options = {
+//   swaggerDefinition,
+//   apis: [
+//     "./src/routes/*.ts",
+//     "./src/controllers/*.ts",
+//     "./src/services/*.ts",
+//     "./src/schema/*.ts",
+//     "./src/docs/*.ts",
+//   ],
+// };
 
 const specs = swaggerJsdoc(options);
 
