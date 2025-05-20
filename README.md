@@ -22,8 +22,8 @@ RESTful API for a polling system with user authentication built using Node.js an
 
 1. Clone the repository
 ```bash
-git clone <repository-url>
-cd polling-system-api
+git clone https://github.com/Shabzynana/polling_api
+cd polling_api
 ```
 
 2. Install dependencies
@@ -62,15 +62,18 @@ docker-compose up --build
 - `POST /api/v1/auth/reset-password` - Password reset
 
 ### Polls
-- `POST /api/v1/polls` - Create poll
-- `GET /api/v1/polls` - Get all polls
-- `GET /api/v1/polls/:id` - Get specific poll
+- `POST /api/v1/poll` - Create poll
+- `GET /api/v1/poll` - Get all polls
+- `GET /api/v1/poll/:id` - Get specific poll
+
+### Options
+- `POST /api/v1/poll/:id/option` - create option for poll
+- `GET /api/v1/poll/:id/options` - Get all option in a poll
 
 ### Vote
-- `POST /api/v1/poll/:id/vote` - Vote on poll
-- `GET /api/v1/poll/:id/results` - Get poll results
+- `POST /api/v1/polls/:id/vote` - Vote on poll
+- `GET /api/v1/polls/:id/results` - Get poll results
 
-All poll endpoints require JWT authentication.
 
 ## Environment Variables
 
