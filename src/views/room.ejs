@@ -72,7 +72,7 @@
     const pollId = document.getElementById('poll-updates').dataset.pollId
     console.log(pollId, "pollId")
 
-    const socket = io('http://localhost:8000');
+    const socket = io("<%= BASE_URL %>");
     socket.emit("join_poll", `poll-${pollId}`);
 
     socket.on('vote-updated', (dataArray) => {

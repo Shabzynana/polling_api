@@ -2,7 +2,6 @@ FROM node:18
 
 WORKDIR /app
 
-# 3. Copy package files and install deps
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
@@ -12,4 +11,5 @@ RUN npm run build
 
 EXPOSE 8000
 
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]
+
