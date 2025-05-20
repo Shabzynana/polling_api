@@ -65,8 +65,10 @@ docker-compose up --build
 - `POST /api/v1/polls` - Create poll
 - `GET /api/v1/polls` - Get all polls
 - `GET /api/v1/polls/:id` - Get specific poll
-- `POST /api/v1/polls/:id/vote` - Vote on poll
-- `GET /api/v1/polls/:id/results` - Get poll results
+
+### Vote
+- `POST /api/v1/poll/:id/vote` - Vote on poll
+- `GET /api/v1/poll/:id/results` - Get poll results
 
 All poll endpoints require JWT authentication.
 

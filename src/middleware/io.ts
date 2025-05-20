@@ -31,7 +31,12 @@ export const initializeSocket = (server: HTTPServer) => {
         console.log(`Client ${socket.id} left poll: ${pollId}`);
       });
 
-      // Handle vote updates
+      // Handle vote updates for all poll
+      socket.on("allVote_updated", (data: { pollId: string; optionId: string }) => {
+        socket.to(data.pollId).emit("vote_received", data);
+      });
+
+      // Handle vote updates for poll voted
       socket.on("vote_updated", (data: { pollId: string; optionId: string }) => {
         socket.to(data.pollId).emit("vote_received", data);
       });

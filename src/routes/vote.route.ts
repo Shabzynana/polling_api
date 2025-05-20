@@ -5,10 +5,11 @@ import { createVote, getPollresults } from "../controllers";
 const voteRoute = Router();
 
 voteRoute.post(
-    "/vote",
+    "/poll/:id/vote",
     authMiddleware,
     createVote
 );
+
 
 voteRoute.get(
     "/poll/:id/results",

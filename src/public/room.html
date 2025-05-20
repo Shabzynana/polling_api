@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Polling</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #2c3e50;
+    }
+
+    #poll-updates {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #34495e;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .option {
+      margin-bottom: 1.2rem;
+    }
+
+    .label {
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+
+    .bar-container {
+      position: relative;
+      background-color: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 24px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #4caf50;
+      color: #fff;
+      text-align: center;
+      line-height: 24px;
+      transition: width 0.6s ease-in-out;
+      white-space: nowrap;
+      padding: 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-Time Polling</h1>
+  <div id="poll-updates" data-poll-id="<%= pollId %>" >Waiting for updates...</div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const pollId = urlParams.get('pollId');
+    console.log(pollId, "pollId")
+
+    const socket = io('http://localhost:8000');
+    socket.emit("join_poll", `poll-${pollId}`);
+
+    socket.on('vote-updated', (dataArray) => {
+      console.log('Votes updated:', dataArray);
+
+      const updatesContainer = document.getElementById('poll-updates');
+      updatesContainer.innerHTML = '';
+
+      if (dataArray.length === 0) {
+        updatesContainer.textContent = 'No votes yet.';
+        return;
+      }
+
+      const totalVotes = dataArray.reduce((sum, item) => sum + item.voteCount, 0);
+
+      const title = document.createElement('h2');
+      title.textContent = dataArray[0].pollName;
+      updatesContainer.appendChild(title);
+
+      dataArray.forEach(data => {
+        const percent = totalVotes ? Number(((data.voteCount / totalVotes) * 100).toFixed(1)) : 0;
+
+        const optionWrapper = document.createElement('div');
+        optionWrapper.className = 'option';
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = `${data.text} (${data.voteCount} votes)`;
+
+        const barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+
+        const barFill = document.createElement('div');
+        barFill.className = 'bar-fill';
+        barFill.style.width = '0%';
+
+        barContainer.appendChild(barFill);
+        optionWrapper.appendChild(label);
+        optionWrapper.appendChild(barContainer);
+        updatesContainer.appendChild(optionWrapper);
+
+        requestAnimationFrame(() => {
+          barFill.style.width = `${percent}%`;
+          barFill.textContent = percent > 5 ? `${percent}%` : '';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+
+

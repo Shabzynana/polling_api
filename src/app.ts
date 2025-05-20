@@ -8,6 +8,8 @@ import { authRoute, pollRoute, optionRoute, userRoute, voteRoute } from "./route
 import http from 'http';
 import path from 'path';
 import cors from "cors";
+import { startPollBroadcast } from "./helpers/emitData";
+import { voteService } from "./controllers";
 
 const app: Express = express();
 const server = http.createServer(app);
@@ -24,6 +26,9 @@ const corsOptions = {
 
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // Middleware setup
 app.use(express.static(path.join(__dirname, 'public')));
@@ -55,8 +60,15 @@ app.use("/openapi.json", (_req: Request, res: Response) => {
   res.send(swaggerSpec);
 });
 
+app.get('/room/:pollId', (req, res) => {
+  const pollId = req.params.pollId;
+  res.render('room', { pollId });
+});
+
 // Error handling
 app.use(errorHandler);
 app.use(routeNotFound);
+
+startPollBroadcast(voteService);
 
 export { app, server, io };
