@@ -10,7 +10,12 @@ RUN cp -r src/views dist/ && cp -r src/public dist/
 # Production stage
 FROM node:18-alpine
 WORKDIR /app
+
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
+
+COPY package*.json ./
+
 EXPOSE 8000
 CMD ["node", "dist/index.js"]
+

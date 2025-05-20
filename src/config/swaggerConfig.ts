@@ -1,6 +1,14 @@
 import swaggerJsdoc, { SwaggerDefinition } from "swagger-jsdoc";
 import config from ".";
-import { version } from "../../package.json";
+// import { version } from "../../package.json";
+import * as fs from "fs";
+import * as path from "path";
+
+const packagePath = path.resolve(__dirname, "../../package.json");
+const packageJson = JSON.parse(fs.readFileSync(packagePath, "utf-8"));
+const version = packageJson.version;
+
+console.log("App version:", version);
 
 const swaggerDefinition: SwaggerDefinition = {
   openapi: "3.1.0",
