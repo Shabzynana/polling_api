@@ -16,6 +16,7 @@ package-lock.json
 docker-compose.yml
 package-lock.json
 .DS_store
+dist
 
 .mail.ts.bk
 src/bk
