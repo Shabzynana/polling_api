@@ -120,7 +120,8 @@
   <div id="pollResults"></div>
 
   <script>
-    const socket = io('http://localhost:8000');
+    const BASE_URL = "{{BASE_URL}}";
+    const socket = io(BASE_URL);
     const pollResultsDiv = document.getElementById('pollResults');
 
     socket.on('allVote_updated', (data) => {

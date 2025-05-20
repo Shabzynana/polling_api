@@ -7,6 +7,7 @@ import { errorHandler, routeNotFound } from "./middleware";
 import { authRoute, pollRoute, optionRoute, userRoute, voteRoute } from "./routes";
 import http from 'http';
 import path from 'path';
+import fs from 'fs';
 import cors from "cors";
 import { startPollBroadcast } from "./helpers/emitData";
 import { voteService } from "./controllers";
@@ -62,8 +63,17 @@ app.use("/openapi.json", (_req: Request, res: Response) => {
 
 app.get('/room/:pollId', (req, res) => {
   const pollId = req.params.pollId;
-  res.render('room', { pollId });
+  res.render('room', { 
+    pollId, 
+    BASE_URL: process.env.BASE_URL });
 });
+
+app.get('/results', (req, res) => {
+  const filePath = path.join(__dirname, 'public', 'app.html');
+  let html = fs.readFileSync(filePath, 'utf8');
+  html = html.replace('{{BASE_URL}}', process.env.BASE_URL);
+  res.send(html);
+})
 
 // Error handling
 app.use(errorHandler);
