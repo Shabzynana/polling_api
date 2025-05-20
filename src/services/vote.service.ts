@@ -50,12 +50,24 @@ export class VoteService {
                 throw new Conflict('You have already voted on this poll');
             }
 
-            const vote = new Vote()
-            vote.user = user;
-            vote.poll = poll;
-            vote.option = option;
+            // const vote = new Vote()
+            // vote.user = user;
+            // vote.poll = poll;
+            // vote.option = option;
+            const vote = this.voteRepository.create({
+                user: { id: userId },
+                poll: { id: pollId },
+                option: { id: optionId }
+              });
 
-            const createdVote = await this.voteRepository.save(vote);          
+            // const createdVote = await this.voteRepository.save(vote); 
+            try {
+                const createdVote = await this.voteRepository.save(vote);
+              } catch (error) {
+                console.error("Failed to save vote:", error);
+                console.error("Vote data:", { user: vote.user?.id, poll: vote.poll?.id, option: vote.option?.id });
+                throw error;
+            }         
             const pollaftervote = await this.pollRepository.findOne({
                 where: { id: pollId },
                 relations: ["options", "options.votes"],
