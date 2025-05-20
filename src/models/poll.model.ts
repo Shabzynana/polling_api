@@ -9,9 +9,6 @@ export class Poll extends ExtendedBaseEntity{
   @Column()
   title: string;
 
-//   @CreateDateColumn()
-//   createdAt: Date;
-
   @Column({ type: 'timestamp', nullable: true })
   expiresAt: Date;
 

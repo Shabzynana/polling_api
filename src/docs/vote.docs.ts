@@ -1,11 +1,19 @@
 export const createVote = `
 /**
  * @swagger
- * /api/v1/vote:
+ * /api/v1/poll/{pollId}/vote:
  *   post:
  *     summary: Create a vote for a poll
  *     tags: [Vote]
  *     description: Allows a user to vote on a poll by providing the poll option ID and user ID
+ *     parameters:
+ *       - in: path
+ *         name: pollId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The ID of the poll to be voted on
  *     requestBody:
  *       required: true
  *       content:
@@ -18,11 +26,6 @@ export const createVote = `
  *                 format: uuid
  *                 description: The ID of the poll option being voted for
  *                 example: d7636d3d-b06e-4847-9072-9a376382ba22
- *               pollId:
- *                 type: string
- *                 format: uuid
- *                 description: The ID of the poll to which the option belongs
- *                 example: 019b28f1-ae6a-4061-9dc7-71fa659ece43
  *     responses:
  *       201:
  *         description: Vote created successfully

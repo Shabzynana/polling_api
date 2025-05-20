@@ -15,6 +15,10 @@ const swaggerDefinition: SwaggerDefinition = {
       description: "Local server",
     },
     {
+      url: "https://staging-polling-api.onrender.com/",
+      description: "staging server",
+    },
+    {
       url: "https://polling-api-kappa.vercel.app/",
       description: "Live server",
     },

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Poll Results</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #222222;
+      --poll-bg: #f9f9f9;
+      --bar-bg: #e0e7ff;
+      --bar-fill: #4f46e5;
+      --accent: #6366f1;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f5f5f5;
+      --poll-bg: #1e1e1e;
+      --bar-bg: #374151;
+      --bar-fill: #818cf8;
+      --accent: #a5b4fc;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.2);
+    }
+
+    .poll {
+      background-color: var(--poll-bg);
+      padding: 20px;
+      margin-bottom: 28px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .poll h2 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    .total-votes {
+      margin-bottom: 15px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .last-updated {
+      font-size: 0.85rem;
+      color: gray;
+      margin-top: 12px;
+    }
+
+    .option {
+      margin-bottom: 16px;
+    }
+
+    .option-text {
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .progress-bar {
+      height: 20px;
+      background-color: var(--bar-bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--bar-fill);
+      width: 0%;
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      font-size: 12px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Live Poll Results</h1>
+  <div class="theme-toggle" id="themeToggle">🌙</div>
+  <div id="pollResults"></div>
+
+  <script>
+    const socket = io('http://localhost:8000');
+    const pollResultsDiv = document.getElementById('pollResults');
+
+    socket.on('allVote_updated', (data) => {
+      console.log('Poll results updated:', data);
+      renderPollResults(data.data);
+      lastUpdateTime = new Date();
+    });
+
+    let lastUpdateTime = null;
+
+    function renderPollResults(results) {
+      pollResultsDiv.innerHTML = '';
+
+      results.forEach(poll => {
+        const pollDiv = document.createElement('div');
+        pollDiv.className = 'poll';
+
+        const title = document.createElement('h2');
+        title.textContent = poll.title;
+
+        const totalVotes = poll.options.reduce((sum, opt) => sum + opt.votes, 0);
+        const totalVotesEl = document.createElement('div');
+        totalVotesEl.className = 'total-votes';
+        totalVotesEl.textContent = `Total votes: ${totalVotes}`;
+
+        pollDiv.appendChild(title);
+        pollDiv.appendChild(totalVotesEl);
+
+        poll.options.forEach(option => {
+          const optionDiv = document.createElement('div');
+          optionDiv.className = 'option';
+
+          const label = document.createElement('div');
+          label.className = 'option-text';
+          label.textContent = `${option.text} (${option.votes})`;
+
+          const progressBar = document.createElement('div');
+          progressBar.className = 'progress-bar';
+
+          const fill = document.createElement('div');
+          fill.className = 'progress-fill';
+          const percent = totalVotes ? ((option.votes / totalVotes) * 100).toFixed(1) : 0;
+          fill.style.width = `${percent}%`;
+          fill.textContent = percent > 5 ? `${percent}%` : '';
+
+          progressBar.appendChild(fill);
+          optionDiv.appendChild(label);
+          optionDiv.appendChild(progressBar);
+          pollDiv.appendChild(optionDiv);
+        });
+
+        const updated = document.createElement('div');
+        updated.className = 'last-updated';
+        updated.textContent = `Updated just now`;
+        pollDiv.appendChild(updated);
+
+        pollResultsDiv.appendChild(pollDiv);
+      });
+    }
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const storedTheme = localStorage.getItem('theme');
+
+    if (storedTheme === 'dark') {
+      document.body.classList.add('dark');
+      themeToggle.textContent = '☀️';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    // update time text dynamically
+    setInterval(() => {
+      if (!lastUpdateTime) return;
+      const now = new Date();
+      const minsAgo = Math.floor((now - lastUpdateTime) / 60000);
+      const timeText = minsAgo === 0 ? 'Updated just now' : `Updated ${minsAgo} minute${minsAgo > 1 ? 's' : ''} ago`;
+
+      document.querySelectorAll('.last-updated').forEach(el => {
+        el.textContent = timeText;
+      });
+    }, 15000);
+  </script>
+</body>
+</html>
+

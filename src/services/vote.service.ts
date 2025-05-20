@@ -5,16 +5,20 @@ import log from "../utils/logger";
 import config from "../config";
 import { formatUser } from "../utils/responsebody";
 import { UserResponsePayload } from "../types";
+import { emitSocketEvent } from "../middleware/io";
 
 
 export class VoteService {
+
+    constructor() {}
 
     public userRepository = AppDataSource.getRepository(User);
     public pollRepository = AppDataSource.getRepository(Poll);
     public optionRepository = AppDataSource.getRepository(Option);
     public voteRepository = AppDataSource.getRepository(Vote);
 
-    public async createVote(payload: any): Promise<{message: string; vote: Partial<Vote>; }> {
+    public async createVote(payload: any): Promise<{message: string; }> {
+    
 
         const {userId, pollId, optionId} = payload;
         try {
@@ -25,20 +29,23 @@ export class VoteService {
             }
 
             const poll = await this.pollRepository.findOne({
-              where: { id: pollId } });
+                where: { id: pollId },
+                relations: ["options", "options.votes"],
+            });
+           
             if (!poll) {
                 throw new Conflict("Poll not found");
             }
 
             const option = await this.optionRepository.findOne({
-              where: { id: optionId, poll: { id: pollId }} });
+              where: { id: optionId, poll: { id: pollId }},
+              relations: [ 'poll', 'votes' ] });
             if (!option) {
                 throw new Conflict("Option not found");
             }
 
             const existingVote = await this.voteRepository.findOne(
                 { where: { poll : { id: pollId }, user: { id: userId } } });
-            log.info(existingVote);
             if (existingVote) {
                 throw new Conflict('You have already voted on this poll');
             }
@@ -48,8 +55,29 @@ export class VoteService {
             vote.poll = poll;
             vote.option = option;
 
-            const createdVote = await this.voteRepository.save(vote);
-            return {vote: createdVote, message:"Vote Createed Successfully"}
+            const createdVote = await this.voteRepository.save(vote);          
+            const pollaftervote = await this.pollRepository.findOne({
+                where: { id: pollId },
+                relations: ["options", "options.votes"],
+            });
+
+            const results = (pollaftervote.options || []).map((opt) => ({
+                pollId: pollaftervote.id,
+                pollName: pollaftervote.title,
+                optionId: opt.id,
+                text: opt.text,
+                voteCount: opt.votes ? opt.votes.length : 0,
+            }));
+            
+            try {
+                emitSocketEvent("vote-updated", `poll-${pollId}`, results);
+            } catch (err) {
+                console.error("Error emitting event:", err);
+            }
+
+            return {
+                message:"Vote Createed Successfully"
+            }
 
         } catch (error) {
             if (error instanceof HttpError) {
@@ -78,6 +106,25 @@ export class VoteService {
         return { data: results, message: "Final Result" };
 
     }
+
+    public async getallPollresults(): Promise<{data: any; message: string;}> {
+        const polls = await this.pollRepository.find({
+            relations: [ 'options', 'options.votes' ],
+        });
+
+        const results = polls.map(poll => ({
+            pollId: poll.id,
+            title: poll.title,
+            options: poll.options.map(option => ({
+              optionId: option.id,
+              text: option.text,
+              votes: option.votes ? option.votes.length : 0,
+            })),
+          }));
+      
+        return { data: results, message: "Final Result" };
+        
+    }    
 
 
 
