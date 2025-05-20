@@ -10,6 +10,7 @@ COPY . .
 RUN npm run build
 
 RUN cp -r src/views dist/
+RUN cp -r src/public dist/
 
 EXPOSE 8000
 
