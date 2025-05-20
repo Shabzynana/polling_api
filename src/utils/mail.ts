@@ -5,8 +5,8 @@ import log from "./logger";
 
 const Sendmail = async (emailcontent: unknown) => {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: config.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT, 10) || 587,
     auth: {
       user: config.SMTP_USER,
       pass: config.SMTP_PASSWORD,
