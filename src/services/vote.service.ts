@@ -50,20 +50,20 @@ export class VoteService {
                 throw new Conflict('You have already voted on this poll');
             }
             
+           
+            const vote = new Vote()
+            vote.user = { id: user.id } as User;
+            vote.poll = { id: poll.id } as Poll;
+            vote.option = { id: option.id } as Option;
+            console.log("vote", vote)
+
             try {
-                const vote = new Vote()
-                vote.user = { id: user.id } as User;
-                vote.poll = { id: poll.id } as Poll;
-                vote.option = { id: option.id } as Option;
-                console.log("vote", vote)
-                console.log('vote.user', vote.user);
-                console.log('vote.poll', vote.poll);
-                console.log('vote.option', vote.option);
                 const createdVote = await this.voteRepository.save(vote);
             } catch (error) {
+                if (error instanceof HttpError) {
+                    console.error("Error creating vote first:", error);
+                }    
                 console.error("Error creating vote:", error);
-                console.log("error", error.type)
-                console.log("error", error.message)
             }
              
          
