@@ -7,6 +7,8 @@ RESTful API for a polling system with user authentication built using Node.js an
 - User authentication (registration, login, password reset)
 - JWT-based secure access
 - Poll creation and voting system
+- Real-time result updates with WebSockets
+- Room-based poll updates
 - Result retrieval and analytics
 
 ## Tech Stack
@@ -16,8 +18,20 @@ RESTful API for a polling system with user authentication built using Node.js an
 - Express.js
 - PostgreSQL
 - Docker
+- Socket.IO
 - JWT Authentication
 
+## Environment Variables
+
+```env
+PORT=8000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=polling_system
+DB_USER=your_user
+DB_PASSWORD=your_password
+JWT_SECRET=your_secret
+```
 ## Quick Start
 
 1. Clone the repository
@@ -39,7 +53,7 @@ cp .env.example .env
 4. Run the application
 ```bash
 # Development
-npm run dev
+npm start:dev
 
 # Production
 npm run build
@@ -74,18 +88,13 @@ docker-compose up --build
 - `POST /api/v1/polls/:id/vote` - Vote on poll
 - `GET /api/v1/polls/:id/results` - Get poll results
 
+## Real Time Update
 
-## Environment Variables
-
-```env
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=polling_system
-DB_USER=your_user
-DB_PASSWORD=your_password
-JWT_SECRET=your_secret
 ```
+http://127.0.0.1:8000/results - get all the poll result
+http://127.0.0.1:8000/room/{pollId} - enter a room to get update of that poll
+```
+
 
 ## License
 
