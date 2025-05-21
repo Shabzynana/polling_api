@@ -50,34 +50,16 @@ export class VoteService {
                 throw new Conflict('You have already voted on this poll');
             }
             
-           
-            // const vote = new Vote()
-            // vote.user = { id: user.id } as User;
-            // vote.poll = { id: poll.id } as Poll;
-            // vote.option = { id: option.id } as Option;
-            // console.log("vote", vote)
-
-            try {
-                // const createdVote = await this.voteRepository.save(vote);
-                const wert = await this.voteRepository
-                    .createQueryBuilder()
-                    .insert()
-                    .into(Vote)
-                    .values({
-                        user: { id: user.id },
-                        poll: { id: poll.id },
-                        option: { id: option.id }
-                    })
-                    .execute();
-                console.log("wert", wert)    
-            } catch (error) {
-                if (error instanceof HttpError) {
-                    console.error("Error creating vote first:", error);
-                }    
-                console.error("Error creating vote:", error);
-            }
-             
-         
+            await this.voteRepository
+                .createQueryBuilder()
+                .insert()
+                .into(Vote)
+                .values({
+                    user: { id: user.id },
+                    poll: { id: poll.id },
+                    option: { id: option.id }
+                })
+                .execute();
             const pollaftervote = await this.pollRepository.findOne({
                 where: { id: pollId },
                 relations: ["options", "options.votes"],
